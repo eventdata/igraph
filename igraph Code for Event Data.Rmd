@@ -52,13 +52,13 @@ df5 <- df4[order(df4$df1.data.src_actor), , drop = FALSE]
 ```
 
 ```{r}
-#Create Graph Object
+#Create graph object
 
 g <- graph_from_data_frame(df5)
 ```
 
 ```{r}
-#Color Specific Nodes
+#Color specific nodes
 
 V(g)["USA"]$color <- "lightblue"
 V(g)["DEU"]$color <- "lightblue"
