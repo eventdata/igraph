@@ -1,0 +1,286 @@
+---
+title: "UTDEventData Animated igraphs"
+date: "2022-09-06"
+output: html_document
+---
+
+## Summary
+
+By utilizing the accompanying JSON file ("EventData.json"), this script will generate four igraphs for 2022 (January, February, March, and April) involving cooperation and conflict among the U.S., Ukraine, Turkey, Russia, India, Great Britain, Germany, and China. It will then produce a GIF so that the changes over time can be viewed in an animated format.
+
+## Install Packages
+
+```{r}
+install.packages("jsonlite")
+install.packages("jsonify")
+install.packages("dplyr")
+install.packages("igraph")
+install.packages("pacman")
+install.packages("magick")
+```
+
+## Load Libraries
+
+```{r}
+library(jsonlite)
+library(jsonify)
+library(dplyr)
+library(igraph)
+library(pacman)
+library(magick)
+```
+
+## Create Plot for January 2022
+
+```{r}
+#Load JSON file and create dataframe
+EventData <- fromJSON("EventData.json") %>% as.data.frame
+
+#Create dataframe using "src_actor," "tgt_actor," "root_code," and "month" columns
+df1 <- data.frame(EventData$data.src_actor, EventData$data.tgt_actor, EventData$data.root_code, EventData$data.month) |>
+
+  #Filter by desired month (January = '01'; February = '02'; March = '03'; April = '04')
+  filter(EventData.data.month %in% c('01')) |> 
+  
+  #Filter by cooperative and conflict root codes ("03" through "20")
+  filter(EventData.data.root_code %in% c('03', '04', '05', '06', '07', '08','09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20')) |>
+  
+  #Extract USA, DEU, GBR, RUS, UKR, CHN, IND, and TUR as actor-pairs from "src_actor" and "tgt_actor" columns 
+  filter(EventData.data.src_actor %in% c('USA', 'DEU', 'GBR', 'RUS', 'UKR', 'CHN', 'IND', 'TUR')) |>
+  filter(EventData.data.tgt_actor %in% c('USA', 'DEU', 'GBR', 'RUS', 'UKR', 'CHN', 'IND', 'TUR'))
+
+#Create dataframe sorted alphabetically over source actor (to take control back from igraph's node positioning)
+df2 <- df1[order(df1$EventData.data.src_actor), , drop = FALSE]
+
+#Create matrix
+matrix <- as.matrix(df2)
+
+#Create graph object
+g <- graph_from_data_frame(matrix)
+
+#Color edges
+E(g)$color <- as.factor(E(g)$EventData.data.root_code)
+#Color edges cyan for all cooperative root codes
+E(g)[EventData.data.root_code %in% c("03", "04", "05", "06", "07", "08")]$color = "cyan"
+#Color edges magenta for all conflict root codes
+E(g)[EventData.data.root_code %in% c("09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20")]$color = "magenta"
+
+#Color vertices
+V(g)["USA"]$color <- "lightblue"
+V(g)["DEU"]$color <- "lightblue"
+V(g)["GBR"]$color <- "lightblue"
+V(g)["TUR"]$color <- "lightblue"
+V(g)["RUS"]$color <- "red"
+V(g)["UKR"]$color <- "yellow"
+
+#Generate/save plot
+png("January_2022.png", width = 890, height = 750)
+
+plot (g, 
+      main = "Cooperation and Conflict by src_actor and tgt_actor: January 2022",
+      edge.arrow.size = 1,
+      edge.arrow.width = .6, 
+      vertex.label.cex = 0.8,
+      layout=layout_in_circle)
+
+legend("bottomleft", cex = 1.2, legend=c("Ukraine", "Russia", "NATO", "Cooperation", "Conflict"),fill=c("yellow","red","lightblue", "cyan", "magenta"))
+
+dev.off()
+```
+
+## Create Plot for February 2022
+
+```{r}
+#Load JSON file and create dataframe
+EventData <- fromJSON("EventData.json") %>% as.data.frame
+
+#Create dataframe using "src_actor," "tgt_actor," "root_code," and "month" columns
+df1 <- data.frame(EventData$data.src_actor, EventData$data.tgt_actor, EventData$data.root_code, EventData$data.month) |>
+  
+  #Filter by desired month (January = '01'; February = '02'; March = '03'; April = '04')
+  filter(EventData.data.month %in% c('02')) |> 
+  
+  #Filter by cooperative and conflict root codes ("03" through "20")
+  filter(EventData.data.root_code %in% c('03', '04', '05', '06', '07', '08','09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20')) |>
+  
+  #Extract USA, DEU, GBR, RUS, UKR, CHN, IND, and TUR as actor-pairs from "src_actor" and "tgt_actor" columns 
+  filter(EventData.data.src_actor %in% c('USA', 'DEU', 'GBR', 'RUS', 'UKR', 'CHN', 'IND', 'TUR')) |>
+  filter(EventData.data.tgt_actor %in% c('USA', 'DEU', 'GBR', 'RUS', 'UKR', 'CHN', 'IND', 'TUR'))
+
+#Create dataframe sorted alphabetically over source actor (to take control back from igraph's node positioning)
+df2 <- df1[order(df1$EventData.data.src_actor), , drop = FALSE]
+
+#Create matrix
+matrix <- as.matrix(df2)
+
+#Create graph object
+g <- graph_from_data_frame(matrix)
+
+#Color edges
+E(g)$color <- as.factor(E(g)$EventData.data.root_code)
+#Color edges cyan for all cooperative root codes
+E(g)[EventData.data.root_code %in% c("03", "04", "05", "06", "07", "08")]$color = "cyan"
+#Color edges magenta for all conflict root codes
+E(g)[EventData.data.root_code %in% c("09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20")]$color = "magenta"
+
+#Color vertices
+V(g)["USA"]$color <- "lightblue"
+V(g)["DEU"]$color <- "lightblue"
+V(g)["GBR"]$color <- "lightblue"
+V(g)["TUR"]$color <- "lightblue"
+V(g)["RUS"]$color <- "red"
+V(g)["UKR"]$color <- "yellow"
+
+#Generate/save plot
+png("February_2022.png", width = 890, height = 750)
+
+plot (g, 
+      main = "Cooperation and Conflict by src_actor and tgt_actor: February 2022",
+      edge.arrow.size = 1,
+      edge.arrow.width = .6, 
+      vertex.label.cex = 0.8,
+      layout=layout_in_circle)
+
+legend("bottomleft", cex = 1.2, legend=c("Ukraine", "Russia", "NATO", "Cooperation", "Conflict"),fill=c("yellow","red","lightblue", "cyan", "magenta"))
+
+dev.off()
+```
+
+## Create Plot for March 2022
+
+```{r}
+#Load JSON file and create dataframe
+EventData <- fromJSON("EventData.json") %>% as.data.frame
+
+#Create dataframe using "src_actor," "tgt_actor," "root_code," and "month" columns
+df1 <- data.frame(EventData$data.src_actor, EventData$data.tgt_actor, EventData$data.root_code, EventData$data.month) |>
+  
+  #Filter by desired month (January = '01'; February = '02'; March = '03'; April = '04')
+  filter(EventData.data.month %in% c('03')) |> 
+  
+  #Filter by cooperative and conflict root codes ("03" through "20")
+  filter(EventData.data.root_code %in% c('03', '04', '05', '06', '07', '08','09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20')) |>
+  
+  #Extract USA, DEU, GBR, RUS, UKR, CHN, IND, and TUR as actor-pairs from "src_actor" and "tgt_actor" columns 
+  filter(EventData.data.src_actor %in% c('USA', 'DEU', 'GBR', 'RUS', 'UKR', 'CHN', 'IND', 'TUR')) |>
+  filter(EventData.data.tgt_actor %in% c('USA', 'DEU', 'GBR', 'RUS', 'UKR', 'CHN', 'IND', 'TUR'))
+
+#Create dataframe sorted alphabetically over source actor (to take control back from igraph's node positioning)
+df2 <- df1[order(df1$EventData.data.src_actor), , drop = FALSE]
+
+#Create matrix
+matrix <- as.matrix(df2)
+
+#Create graph object
+g <- graph_from_data_frame(matrix)
+
+#Color edges
+E(g)$color <- as.factor(E(g)$EventData.data.root_code)
+#Color edges cyan for all cooperative root codes
+E(g)[EventData.data.root_code %in% c("03", "04", "05", "06", "07", "08")]$color = "cyan"
+#Color edges magenta for all conflict root codes
+E(g)[EventData.data.root_code %in% c("09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20")]$color = "magenta"
+
+#Color vertices
+V(g)["USA"]$color <- "lightblue"
+V(g)["DEU"]$color <- "lightblue"
+V(g)["GBR"]$color <- "lightblue"
+V(g)["TUR"]$color <- "lightblue"
+V(g)["RUS"]$color <- "red"
+V(g)["UKR"]$color <- "yellow"
+
+#Generate/save plot
+png("March_2022.png", width = 890, height = 750)
+
+plot (g, 
+      main = "Cooperation and Conflict by src_actor and tgt_actor: March 2022",
+      edge.arrow.size = 1,
+      edge.arrow.width = .6, 
+      vertex.label.cex = 0.8,
+      layout=layout_in_circle)
+
+legend("bottomleft", cex = 1.2, legend=c("Ukraine", "Russia", "NATO", "Cooperation", "Conflict"),fill=c("yellow","red","lightblue", "cyan", "magenta"))
+
+dev.off()
+```
+
+## Create Plot for April 2022
+
+```{r}
+#Load JSON file and create dataframe
+EventData <- fromJSON("EventData.json") %>% as.data.frame
+
+#Create dataframe using "src_actor," "tgt_actor," "root_code," and "month" columns
+df1 <- data.frame(EventData$data.src_actor, EventData$data.tgt_actor, EventData$data.root_code, EventData$data.month) |>
+  
+  #Filter by desired month (January = '01'; February = '02'; March = '03'; April = '04')
+  filter(EventData.data.month %in% c('04')) |> 
+  
+  #Filter by cooperative and conflict root codes ("03" through "20")
+  filter(EventData.data.root_code %in% c('03', '04', '05', '06', '07', '08','09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20')) |>
+  
+  #Extract USA, DEU, GBR, RUS, UKR, CHN, IND, and TUR as actor-pairs from "src_actor" and "tgt_actor" columns 
+  filter(EventData.data.src_actor %in% c('USA', 'DEU', 'GBR', 'RUS', 'UKR', 'CHN', 'IND', 'TUR')) |>
+  filter(EventData.data.tgt_actor %in% c('USA', 'DEU', 'GBR', 'RUS', 'UKR', 'CHN', 'IND', 'TUR'))
+
+#Create dataframe sorted alphabetically over source actor (to take control back from igraph's node positioning)
+df2 <- df1[order(df1$EventData.data.src_actor), , drop = FALSE]
+
+#Create matrix
+matrix <- as.matrix(df2)
+
+#Create graph object
+g <- graph_from_data_frame(matrix)
+
+#Color edges
+E(g)$color <- as.factor(E(g)$EventData.data.root_code)
+#Color edges cyan for all cooperative root codes
+E(g)[EventData.data.root_code %in% c("03", "04", "05", "06", "07", "08")]$color = "cyan"
+#Color edges magenta for all conflict root codes
+E(g)[EventData.data.root_code %in% c("09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20")]$color = "magenta"
+
+#Color vertices
+V(g)["USA"]$color <- "lightblue"
+V(g)["DEU"]$color <- "lightblue"
+V(g)["GBR"]$color <- "lightblue"
+V(g)["TUR"]$color <- "lightblue"
+V(g)["RUS"]$color <- "red"
+V(g)["UKR"]$color <- "yellow"
+
+#Generate/save plot
+png("April_2022.png", width = 890, height = 750)
+
+plot (g, 
+      main = "Cooperation and Conflict by src_actor and tgt_actor: April 2022",
+      edge.arrow.size = 1,
+      edge.arrow.width = .6, 
+      vertex.label.cex = 0.8,
+      layout=layout_in_circle)
+
+legend("bottomleft", cex = 1.2, legend=c("Ukraine", "Russia", "NATO", "Cooperation", "Conflict"),fill=c("yellow","red","lightblue", "cyan", "magenta"))
+
+dev.off()
+```
+
+## Animate igraphs Using Saved Images
+
+```{r}
+#Read file names
+images <- lapply(c("January_2022.png",
+                   "February_2022.png",
+                   "March_2022.png",
+                   "April_2022.png")
+                 , image_read)
+
+#Join images
+images_joined <- image_join(images)
+
+#Animate at one frame per second
+images_gif <- image_animate(images_joined, fps = 1)
+
+#View animated GIF
+images_gif
+
+#Save GIF
+image_write(image = images_gif, path = "igraphs_animated.gif")
+```
