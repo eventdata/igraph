@@ -2,7 +2,7 @@
 
 This repository is focused on the visualization of cooperation and conflict among countries as source and target actors. 
 
-The data are obtained via the [UTDEventData R package](https://github.com/KateHyoung/UTDEventData) (please refer to the "Data_Pull.Rmd" file for an example of how to interact with the UTDEventData R package to query event data). An API key is required to access the data, and registration can be accomplished here: (https://eventdata.utdallas.edu/signup).
+The data are obtained via the [UTDEventData R package](https://github.com/KateHyoung/UTDEventData) (please refer to the "Data_Pull.Rmd" file for an example of how to interact with the UTDEventData R package to query event data). An API key is required to access the data, and registration can be accomplished here: https://eventdata.utdallas.edu/signup.
 
 The igraph package in R is utilized to generate static images, while the pacman and magick packages are used to animate those images.
 
