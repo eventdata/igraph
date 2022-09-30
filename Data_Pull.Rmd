@@ -1,0 +1,49 @@
+---
+title: "Data_Pull"
+date: "2022-09-30"
+output: html_document
+---
+
+## Summary
+
+This script allows the user to interact with the UTDEventData R package and query event data. More information can be found at https://github.com/KateHyoung/UTDEventData.
+
+## Install Packages
+
+```{r}
+install.packages("devtools")
+install.packages("UTDEventData")
+```
+
+## Load Libraries
+
+```{r}
+library(devtools)
+library(UTDEventData)
+```
+
+## Download GitHub repo
+
+```{r}
+devtools::install_github("KateHyoung/UTDEventData")
+```
+
+## Define your API key by placing it between the below quotes
+
+```{r}
+utd_api_key <- ""
+```
+
+## Query event data 
+
+```{r}
+table_name <- "phoenix_rt"
+ 
+country <- list('USA', 'DEU', 'GBR', 'RUS', 'UKR', 'CHN', 'IND', 'TUR') #If one country is desired, use list("USA") or list("DEU"), etc. 
+ 
+start <- "20180101" #Make sure there is a "0" in front of the single-digit months
+ 
+end <- "20180430" #Make sure there is a "0" in front of the single-digit months
+ 
+EventData <- pullData(utd_api_key, table_name, country, start, end, citation = FALSE)
+```
