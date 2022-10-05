@@ -8,24 +8,14 @@ output: html_document
 
 This script allows the user to interact with the UTDEventData R package and query event data. More information can be found at https://github.com/KateHyoung/UTDEventData.
 
-## Install Packages
+## Install Packages and Load Libraries
 
 ```{r}
 install.packages("devtools")
-install.packages("UTDEventData")
-```
-
-## Load Libraries
-
-```{r}
 library(devtools)
+library(remotes)
+install_github("KateHyoung/UTDEventData")
 library(UTDEventData)
-```
-
-## Download GitHub repo
-
-```{r}
-devtools::install_github("KateHyoung/UTDEventData")
 ```
 
 ## Define your API key by placing it between the below quotes
